@@ -12,27 +12,28 @@ export class KeywordsResolver {
   createKeyword(
     @Args("createKeywordInput") createKeywordInput: CreateKeywordInput
   ) {
-    return this.keywordsService.create(createKeywordInput);
+    return this.keywordsService.create({createKeywordInput});
   }
 
-  @Query(() => [Keyword], { name: "keywords" })
+  @Query(() => [Keyword])
   findAll() {
     return this.keywordsService.findAll();
   }
 
-  @Query(() => Keyword, { name: "keyword" })
+  @Query(() => Keyword)
   findOne(@Args("id", { type: () => String }) id: string) {
     return this.keywordsService.findOne(id);
   }
 
   @Mutation(() => Keyword)
   updateKeyword(
+    @Args('keywordId') keywordId: string,
     @Args("updateKeywordInput") updateKeywordInput: UpdateKeywordInput
   ) {
-    return this.keywordsService.update(
-      updateKeywordInput.id,
+    return this.keywordsService.update({
+      keywordId,
       updateKeywordInput
-    );
+    });
   }
 
   @Mutation(() => Keyword)

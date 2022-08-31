@@ -1,4 +1,4 @@
-import { ObjectType, Field, Int } from "@nestjs/graphql";
+import { ObjectType, Field } from "@nestjs/graphql";
 import { User } from "src/users/entities/user.entity";
 import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 
@@ -11,5 +11,5 @@ export class UserUrl {
 
   @ManyToOne(() => User)
   @Field(() => User)
-  userId: User;
+  user: User;
 }

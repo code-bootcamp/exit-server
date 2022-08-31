@@ -15,22 +15,23 @@ export class UserUrlsResolver {
     return this.userUrlsService.create(createUserUrlInput);
   }
 
-  @Query(() => [UserUrl], { name: "userUrls" })
+  @Query(() => [UserUrl])
   findAll() {
     return this.userUrlsService.findAll();
   }
 
-  @Query(() => UserUrl, { name: "userUrl" })
+  @Query(() => UserUrl)
   findOne(@Args("id", { type: () => String }) id: string) {
     return this.userUrlsService.findOne(id);
   }
 
   @Mutation(() => UserUrl)
   updateUserUrl(
+    @Args('userId') userId: string,
     @Args("updateUserUrlInput") updateUserUrlInput: UpdateUserUrlInput
   ) {
     return this.userUrlsService.update(
-      updateUserUrlInput.id,
+      userId,
       updateUserUrlInput
     );
   }

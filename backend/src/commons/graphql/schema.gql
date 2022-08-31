@@ -7,13 +7,6 @@ type BoardImage {
   url: String!
 }
 
-type Keyword {
-  id: String!
-  name: String!
-  users: [User!]!
-  boards: [Board!]!
-}
-
 type Category {
   id: String!
   name: String!
@@ -26,26 +19,6 @@ type Tag {
   users: [User!]!
   boards: [Board!]!
 }
-
-type Board {
-  id: String!
-  title: String!
-  context: String!
-  num: Int!
-  description: String!
-  leader: String!
-  isPremium: Boolean!
-  endAt: DateTime!
-  imageId: BoardImage!
-  tags: [Tag!]!
-  users: [User!]!
-  keywords: [Keyword!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 type UserImage {
   id: String!
@@ -61,11 +34,38 @@ type User {
   isRemote: Boolean!
   point: Int!
   history: String!
-  imageId: UserImage!
+  userImage: UserImage!
   tags: [Tag!]!
   boards: [Board!]!
   keywords: [Keyword!]!
 }
+
+type Keyword {
+  id: String!
+  name: String!
+  users: [User!]!
+  boards: [Board!]!
+}
+
+type Board {
+  id: String!
+  title: String!
+  context: String!
+  num: Int!
+  description: String!
+  leader: String!
+  isPremium: Boolean!
+  endAt: DateTime!
+  boardImage: BoardImage!
+  tags: [Tag!]!
+  users: [User!]!
+  keywords: [Keyword!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type Like {
   id: String!
@@ -78,39 +78,41 @@ type Payment {
   amount: Int!
   method: String!
   isCancel: Boolean!
-  userId: User!
+  user: User!
 }
 
 type UserUrl {
   id: String!
-  userId: User!
+  user: User!
 }
 
 type Comment {
   id: String!
   comment: String!
-  boardId: [Board!]!
+  board: [Board!]!
+  user: [User!]!
 }
 
 type SubComment {
   id: String!
   subComment: String!
-  commentId: [Comment!]!
+  user: [User!]!
+  comment: [Comment!]!
 }
 
 type PaymentHistory {
   id: String!
-  userId: [User!]!
-  boardId: [Board!]!
+  user: [User!]!
+  board: [Board!]!
 }
 
 type Query {
-  users: [User!]!
-  user(id: String!): User!
+  fetchUsers: [User!]!
+  fetchUser(userId: String!): User!
   boards: [Board!]!
   board(id: String!): Board!
-  keywords: [Keyword!]!
-  keyword(id: String!): Keyword!
+  findAll: [UserImage!]!
+  findOne(id: String!): UserImage!
   tags: [Tag!]!
   tag(id: String!): Tag!
   categories: [Category!]!
@@ -119,10 +121,6 @@ type Query {
   like(id: Int!): Like!
   payments: [Payment!]!
   payment(id: String!): Payment!
-  userUrls: [UserUrl!]!
-  userUrl(id: String!): UserUrl!
-  userImages: [UserImage!]!
-  userImage(id: String!): UserImage!
   boardImages: [BoardImage!]!
   boardImage(id: String!): BoardImage!
   comments: [Comment!]!
@@ -135,13 +133,13 @@ type Query {
 
 type Mutation {
   createUser(createUserInput: CreateUserInput!): User!
-  updateUser(updateUserInput: UpdateUserInput!): User!
-  removeUser(id: String!): User!
+  updateUser(userId: String!, updateUserInput: UpdateUserInput!): User!
+  removeUser(userId: String!): User!
   createBoard(createBoardInput: CreateBoardInput!): Board!
   updateBoard(updateBoardInput: UpdateBoardInput!): Board!
   removeBoard(id: String!): Board!
   createKeyword(createKeywordInput: CreateKeywordInput!): Keyword!
-  updateKeyword(updateKeywordInput: UpdateKeywordInput!): Keyword!
+  updateKeyword(keywordId: String!, updateKeywordInput: UpdateKeywordInput!): Keyword!
   removeKeyword(id: String!): Keyword!
   createTag(createTagInput: CreateTagInput!): Tag!
   updateTag(updateTagInput: UpdateTagInput!): Tag!
@@ -156,10 +154,10 @@ type Mutation {
   updatePayment(updatePaymentInput: UpdatePaymentInput!): Payment!
   removePayment(id: String!): Payment!
   createUserUrl(createUserUrlInput: CreateUserUrlInput!): UserUrl!
-  updateUserUrl(updateUserUrlInput: UpdateUserUrlInput!): UserUrl!
+  updateUserUrl(userId: String!, updateUserUrlInput: UpdateUserUrlInput!): UserUrl!
   removeUserUrl(id: String!): UserUrl!
   createUserImage(createUserImageInput: CreateUserImageInput!): UserImage!
-  updateUserImage(updateUserImageInput: UpdateUserImageInput!): UserImage!
+  updateUserImage(userId: String!, updateUserImageInput: UpdateUserImageInput!): UserImage!
   removeUserImage(id: String!): UserImage!
   createBoardImage(createBoardImageInput: CreateBoardImageInput!): BoardImage!
   updateBoardImage(updateBoardImageInput: UpdateBoardImageInput!): BoardImage!
@@ -176,30 +174,52 @@ type Mutation {
 }
 
 input CreateUserInput {
-  """Example field (placeholder)"""
-  id: String!
+  email: String!
+  password: String!
+  nickname: String!
+  description: String!
+  isRemote: Boolean!
+  point: Int!
+  history: String!
+  userImage: CreateUserImageInput!
+  tags: [String!]!
+  boards: [String!]!
+  keywords: [String!]!
+}
+
+input CreateUserImageInput {
+  url: String!
 }
 
 input UpdateUserInput {
-  id: String!
+  email: String
+  password: String
+  nickname: String
+  description: String
+  isRemote: Boolean
+  point: Int
+  history: String
+  userImage: CreateUserImageInput
+  tags: [String!]
+  boards: [String!]
+  keywords: [String!]
 }
 
 input CreateBoardInput {
-  """Example field (placeholder)"""
-  id: String!
+  title: String!
 }
 
 input UpdateBoardInput {
+  title: String
   id: String!
 }
 
 input CreateKeywordInput {
-  """Example field (placeholder)"""
-  id: String!
+  name: String!
 }
 
 input UpdateKeywordInput {
-  id: String!
+  name: String
 }
 
 input CreateTagInput {
@@ -239,21 +259,15 @@ input UpdatePaymentInput {
 }
 
 input CreateUserUrlInput {
-  """Example field (placeholder)"""
-  id: String!
+  user: String!
 }
 
 input UpdateUserUrlInput {
-  id: String!
-}
-
-input CreateUserImageInput {
-  """Example field (placeholder)"""
-  id: String!
+  user: String
 }
 
 input UpdateUserImageInput {
-  id: String!
+  url: String
 }
 
 input CreateBoardImageInput {

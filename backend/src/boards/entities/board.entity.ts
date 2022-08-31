@@ -63,7 +63,7 @@ export class Board {
   @JoinColumn()
   @OneToOne(() => BoardImage)
   @Field(() => BoardImage)
-  imageId: BoardImage;
+  boardImage: BoardImage;
 
   @JoinTable()
   @ManyToMany(() => Tag, (tags) => tags.boards)

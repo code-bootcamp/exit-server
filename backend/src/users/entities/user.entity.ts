@@ -18,7 +18,7 @@ import {
 
 @Entity()
 @ObjectType()
-export class User {
+export class User { 
   @PrimaryGeneratedColumn("uuid")
   @Field(() => String)
   id: string;
@@ -63,7 +63,7 @@ export class User {
   @JoinColumn()
   @OneToOne(() => UserImage)
   @Field(() => UserImage)
-  imageId: UserImage;
+  userImage: UserImage;
 
   @JoinTable()
   @ManyToMany(() => Tag, (tags) => tags.users)

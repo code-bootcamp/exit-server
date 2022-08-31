@@ -1,5 +1,6 @@
 import { ObjectType, Field } from "@nestjs/graphql";
 import { Comment } from "src/comments/entities/comment.entity";
+import { User } from "src/users/entities/user.entity";
 import {
   Column,
   Entity,
@@ -20,7 +21,12 @@ export class SubComment {
   subComment: string;
 
   @JoinTable()
+  @ManyToOne(() => User)
+  @Field(() => [User])
+  user: User[];
+
+  @JoinTable()
   @ManyToOne(() => Comment)
   @Field(() => [Comment])
-  commentId: Comment[];
+  comment: Comment[];
 }

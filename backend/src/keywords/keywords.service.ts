@@ -1,10 +1,8 @@
 import { Injectable } from "@nestjs/common";
-import { CreateKeywordInput } from "./dto/create-keyword.input";
-import { UpdateKeywordInput } from "./dto/update-keyword.input";
 
 @Injectable()
 export class KeywordsService {
-  create(createKeywordInput: CreateKeywordInput) {
+  create({createKeywordInput}) {
     return "This action adds a new keyword";
   }
 
@@ -16,8 +14,8 @@ export class KeywordsService {
     return `This action returns a #${id} keyword`;
   }
 
-  update(id: string, updateKeywordInput: UpdateKeywordInput) {
-    return `This action updates a #${id} keyword`;
+  update({keywordId, updateKeywordInput}) {
+    return 
   }
 
   remove(id: string) {
