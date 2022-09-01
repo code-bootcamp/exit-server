@@ -71,6 +71,7 @@ export class UsersService {
         saveKeywords.push(newKeyword);
       }
     }
+    console.log(saveKeywords)
     const saveUser = await this.userRepository.save({
       password,
       email,
@@ -80,6 +81,7 @@ export class UsersService {
       boards: saveBoards,   
       keywords: saveKeywords
     })
+
     return saveUser
   }
 

@@ -70,7 +70,6 @@ export class User {
   @Field(() => [Tag])
   tags: Tag[];
 
-  @JoinTable()
   @ManyToMany(() => Board, (boards) => boards.users)
   @Field(() => [Board])
   boards: Board[];
