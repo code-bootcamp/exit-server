@@ -136,13 +136,14 @@ export class BoardsService {
     const applied = [];
     if (appliedTemp.length)
       for (const i of appliedTemp) {
-        applied.push(i.board.id);
+        if (i.board != null) applied.push(i.board.id);
       }
 
     const filteredInfo = newWaitingInfo.filter(
       (ele) => filt.includes(ele.id) && !applied.includes(ele.id)
     );
 
+    if (filteredInfo.length == 0) throw Error("만족하는 데이터가 없습니다.");
     return filteredInfo[Math.floor(Math.random() * filteredInfo.length)];
   }
 
