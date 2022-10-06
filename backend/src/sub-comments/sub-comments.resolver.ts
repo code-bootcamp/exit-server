@@ -41,7 +41,7 @@ export class SubCommentsResolver {
   }
 
   @UseGuards(GqlAuthAccessGuard)
-  @Mutation(() => [String])
+  @Mutation(() => String)
   removeSubComment(
     @Args("subCommentId", { nullable: true }) subCommentId: string,
     @Args("commentId", { nullable: true }) commentId: string, //
